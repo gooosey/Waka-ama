@@ -38,7 +38,7 @@ def select_files_with_keyword(folder_path: str, keyword: str) -> list:
 
 folder_path = "/Users/goose/Desktop/3.7B resource files" 
 
-keyword = "Final"  
+keyword = "Final"
 
 selected_files = select_files_with_keyword(folder_path, keyword) 
 
@@ -57,3 +57,8 @@ if selected_files:
             print(f"Unable to open file '{file_path}'.")
 else:
     print(f"No files with the keyword '{keyword}' found in the folder.")
+
+x = len(file_path)
+
+
+print (x)
