@@ -1,47 +1,63 @@
-import os 
+import os
+import os.path
 
-def select_files_with_keyword(folder_path: str, keyword: str) -> list: 
-    #find file location
+def select_files_with_keyword(folder_path: str, keyword: str, keyword_two: str) -> list:
 
-    absolute_folder_path = os.path.abspath(folder_path) 
-    #put inside list
+    absolute_folder_path = os.path.abspath(folder_path)
 
-    selected_files = [] 
 
-     
+    #Create empty list for the files to be in
 
-    
+    selected_files = []
+    selected_files2 = []
+
+    #Find files that contains a keyword before going into the subfiles
 
     for root, dirs, files in os.walk(absolute_folder_path): 
 
-        for file_name in files: 
+    #Find file with a certain name
 
-            if keyword in file_name: 
+        for file_name in files:
 
-                # Find file 
+            if keyword in file_name:
 
                 file_path = os.path.join(root, file_name) 
 
-  
+                #Check for if keyword_two is in file
 
-                # make sure its a file
+                file_name = os.path.dirname(file_path)
 
-                if os.path.isfile(file_path): 
+                #Find subfile with certain name
 
-                    selected_files.append(file_path) 
+                for root, dirs, files in os.walk(file_name):
+                    
+                    if keyword_two in file_name:
+                        
+                #Appends the file to the apporipate list
 
-     
+                        if os.path.isfile(file_path):
 
-    return selected_files 
+                            selected_files.append(file_path)    
 
-# Change for path location and keyword
+                        else:
+                            if os.path.isfile(file_path):
+                                selected_files2.append(file_path)
 
-folder_path = "/Users/goose/Desktop/3.7B resource files" 
+    #Returns the files to selected list
+
+    return selected_files , selected_files2
+
+
+
+# Change for path location and keywords
+folder_path = "/Users/goose/Desktop/3.7B resource files"
 
 keyword = "Final"
+keyword_two = "2018"
 
-selected_files = select_files_with_keyword(folder_path, keyword) 
+#Opening the file
 
+selected_files, selected_files2 = select_files_with_keyword(folder_path, keyword, keyword_two)
 
 if selected_files:
     for file_path in selected_files:
@@ -56,9 +72,10 @@ if selected_files:
         except IOError:
             print(f"Unable to open file '{file_path}'.")
 else:
-    print(f"No files with the keyword '{keyword}' found in the folder.")
+    print(f"No files with the keyword '{keyword_two}' found in the folder.")
 
-x = len(file_path)
+#Get count of files
 
+listoffiles = len(selected_files)
 
-print (x)
+print (listoffiles)
