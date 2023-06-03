@@ -50,7 +50,7 @@ def select_files_with_keyword(folder_path: str, keyword: str, keyword_two: str) 
 
 
 # Change for path location and keywords
-folder_path = "/Users/goose/Desktop/3.7B resource files"
+folder_path = "resources"
 
 keyword = "Final"
 keyword_two = "2018"
