@@ -76,6 +76,7 @@ else:
 
 #Get count of files
 
-listoffiles = len(selected_files)
+amf = len(selected_files)
 
-print (listoffiles)
+print (amf)
+
