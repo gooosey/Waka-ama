@@ -1,6 +1,6 @@
 import os
 
-year = '2017'
+year = '201'
 racetype = "Final"
 races = []
 
@@ -46,7 +46,25 @@ def find_files(race, folder_path):
 
 find_folder(year, racetype, "resources") 
 
-# Limits the commas to one instead of many 
+#Create a function to calculate the points of the races
+
+def assign_points(place):
+    if place == 1:
+        return 8
+    elif place == 2:
+        return 7
+    elif place == 3:
+        return 6
+    elif place == 4:
+        return 5
+    elif place == 5:
+        return 4
+    elif place == 6:
+        return 3
+    elif place == 7:
+        return 2
+    else:
+        return 1
 
 # for race in races:
 #     lines = race.split('\n')
@@ -65,16 +83,13 @@ class Info:
             self.broken = entries
             self.valid = False
             return
-
-        self.lane = entries[0]
-        self.uID = entries[1]
+        
         self.place = entries[2]
-        self.name = entries[3]
         self.club = entries[4]
-        self.timetaken = entries[5]
-        self.pgain = entries[6]
+        self.points = assign_points(int(self.place))
         self.valid = True
 
+#is going to hold the data
 
 inlist = []
 
@@ -95,8 +110,9 @@ for race in races:
             continue
         inlist.append(race_info)
 
-# print club and place 
+# print club and place(has points already assigned)
+
 
 for race_info in inlist:
-    print(race_info.club, race_info.place)
+    print(f"{race_info.club}, {race_info.points}")
 
