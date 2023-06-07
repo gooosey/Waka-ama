@@ -1,21 +1,24 @@
 import os
 
-# Can be edited to change the year and racetype of the races 
-
-year = '2018'
+year = '2017'
 racetype = "Final"
 races = []
 
 # Function to read the contents of a file
 
 def read_file(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            file_content = file.read()
-        return file_content
-    except OSError:
-        print(f"Oops! Something went wrong with file: {file_path}")
-        return None
+    encodings = ['utf-8','latin-1'] # File containing these encoding
+    
+    for encoding in encodings:
+        try:
+            with open(file_path, 'r', encoding=encoding) as file:
+                file_content = file.read()
+            return file_content
+        except UnicodeDecodeError:
+            continue
+    
+    print(f"Oops! Something went wrong with file: {file_path}")
+    return None
 
 # Function to read the contents of a file
 
@@ -41,8 +44,17 @@ def find_files(race, folder_path):
 
 # Call the find_folder function to search for files          
 
-find_folder(year, racetype, "resources")      
-    
+find_folder(year, racetype, "resources") 
+
+# Limits the commas to one instead of many 
+
+# for race in races:
+#     lines = race.split('\n')
+#     for line in lines[1:]:
+#         line = line.split(',')
+#         filter_line = ','.join(filter(None, line))  This is a prototye for testing the limiting of my commas 
+#         print(filter_line)
+
 # Class to hold information about a race entry      
 
 class Info:
@@ -63,9 +75,8 @@ class Info:
         self.pgain = entries[6]
         self.valid = True
 
+
 inlist = []
-
-
 
 # Limits the commas to one instead of many 
 
@@ -76,18 +87,16 @@ for race in races:
         line = line.split(',')
         filter_line = ','.join(filter(None, line))
         race_info = Info(filter_line)
+
+        #If the data is broken as in there is less than 10 it tells us which data is broken
+        
         if not race_info.valid:
             # print(f'gone {race_info.broken}') <- can add for the ones with no id 
             continue
         inlist.append(race_info)
 
+# print club and place 
 
 for race_info in inlist:
     print(race_info.club, race_info.place)
-
-
-
-# Print the contents of each file
-# for file_content in file_contents: 
-    # print(file_content) 
 
