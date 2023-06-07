@@ -1,6 +1,6 @@
 import os
 
-year = '2017'
+year = '2018'
 racetype = "Final"
 races = []
 
