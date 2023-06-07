@@ -77,7 +77,7 @@ for race in races:
         filter_line = ','.join(filter(None, line))
         race_info = Info(filter_line)
         if not race_info.valid:
-            print(f'Invalid race info: {race_info.broken}')
+            # print(f'gone {race_info.broken}') <- can add for the ones with no id 
             continue
         inlist.append(race_info)
 
