@@ -1,5 +1,7 @@
 import os
 
+# Can be edited to change the year and racetype of the races 
+
 year = '2018'
 racetype = "Final"
 races = []
@@ -44,17 +46,18 @@ def find_files(race, folder_path):
 
 # Call the find_folder function to search for files          
 
-find_folder(year, racetype, "resources") 
+find_folder(year, racetype, "resources")      
 
 # Limits the commas to one instead of many 
 
-# for race in races:
-#     lines = race.split('\n')
-#     for line in lines[1:]:
-#         line = line.split(',')
-#         filter_line = ','.join(filter(None, line))  This is a prototye for testing the limiting of my commas 
-#         print(filter_line)
+for race in races:
+    lines = race.split('\n')
 
+    for line in lines[1:]:
+        line = line.split(',')
+        filter_line = ','.join(filter(None, line))
+        print(filter_line)
+    
 # Class to hold information about a race entry      
 
 class Info:
@@ -73,27 +76,30 @@ class Info:
         self.club = entries[4]
         self.timetaken = entries[5]
         self.pgain = entries[6]
-        self.valid = True
-
-
-inlist = []
-
-# Limits the commas to one instead of many 
+        self.timetaken2 = entries[7]
+        self.pgain2 = entries[8]
+        self.pgain3 = entries[9]
 
 for race in races:
     lines = race.split('\n')
 
-    for line in lines[1:]:
-        line = line.split(',')
-        filter_line = ','.join(filter(None, line))
-        race_info = Info(filter_line)
+for line in lines[1:]:
+    line = line.split(',')
+    filter_line = ','.join(filter(None, line))
+    print(filter_line)
 
-        #If the data is broken as in there is less than 10 it tells us which data is broken
-        
-        if not race_info.valid:
-            print(f'Invalid race info: {race_info.broken}')
-            continue
-        inlist.append(race_info)
+    race_info = Info(filter_line)
+    print(f"Lane: {race_info.lane}")
+    print(f"uID: {race_info.uID}")
+    print(f"place: {race_info.place}")
+    print(f"name: {race_info.name}")
+    print(f"club: {race_info.club}")
+    print(f"timetaken: {race_info.timetaken}")
+    print(f"point gain: {race_info.pgain}")
+    print(f"timetaken2: {race_info.timetaken2}")
+    print(f"point gain: {race_info.pgain2}")
+    print(f"point gain: {race_info.pgain3}")
+
 
 # print club and place 
 
