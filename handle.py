@@ -46,14 +46,25 @@ def find_files(race, folder_path):
 
 find_folder(year, racetype, "resources") 
 
-# Limits the commas to one instead of many 
+#Create a function to calculate the points of the races
 
-# for race in races:
-#     lines = race.split('\n')
-#     for line in lines[1:]:
-#         line = line.split(',')
-#         filter_line = ','.join(filter(None, line))  This is a prototye for testing the limiting of my commas 
-#         print(filter_line)
+def assign_points(place):
+    if place == 1:
+        return 8
+    elif place == 2:
+        return 7
+    elif place == 3:
+        return 6
+    elif place == 4:
+        return 5
+    elif place == 5:
+        return 4
+    elif place == 6:
+        return 3
+    elif place == 7:
+        return 2
+    else:
+        return 1
 
 # Class to hold information about a race entry      
 
@@ -65,16 +76,13 @@ class Info:
             self.broken = entries
             self.valid = False
             return
-
-        self.lane = entries[0]
-        self.uID = entries[1]
-        self.place = entries[2]
-        self.name = entries[3]
+        
+        self.place = entries[0]
         self.club = entries[4]
-        self.timetaken = entries[5]
-        self.pgain = entries[6]
+        self.points = assign_points(int(self.place))
         self.valid = True
 
+#is going to hold the data
 
 inlist = []
 
@@ -91,12 +99,39 @@ for race in races:
         #If the data is broken as in there is less than 10 it tells us which data is broken
         
         if not race_info.valid:
-            # print(f'Invalid race info: {race_info.broken}')
+            # print(f'gone {race_info.broken}') 
             continue
         inlist.append(race_info)
 
-# print club and place 
+# Create a dictionary to store club names and their total points
 
-for race_info in inlist:
-    print(race_info.club, race_info.place)
+
+# for race_info in inlist:
+#     print(race_info.club, race_info.place)  #test
+
+club_points = {}
+
+# Loop over the races and process the data
+for race in races:
+    lines = race.split('\n')
+    for line in lines[1:]:
+        line = line.split(',')
+        filter_line = ','.join(filter(None, line))
+        race_info = Info(filter_line)
+
+        # If the data is broken, skip it
+        if not race_info.valid:
+            continue
+
+        # Check if the club already exists in the dictionary
+        if race_info.club in club_points:
+            # If it exists, add the points to the existing value
+            club_points[race_info.club] += race_info.points
+        else:
+            # If it doesn't exist, create a new entry in the dictionary
+            club_points[race_info.club] = race_info.points
+
+# Print club names and total points
+for club, points in club_points.items():
+    print(f"{club}: {points} points")
 

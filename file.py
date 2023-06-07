@@ -53,7 +53,7 @@ def select_files_with_keyword(folder_path: str, keyword: str, keyword_two: str) 
 folder_path = "resources"
 
 keyword = "Final"
-keyword_two = "2018"
+keyword_two = "2017"
 
 #Opening the file
 
