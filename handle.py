@@ -48,12 +48,12 @@ find_folder(year, racetype, "resources")
 
 # Limits the commas to one instead of many 
 
-for race in races:
-    lines = race.split('\n')
-    for line in lines[1:]:
-        line = line.split(',')
-        filter_line = ','.join(filter(None, line))
-        print(filter_line)
+# for race in races:
+#     lines = race.split('\n')
+#     for line in lines[1:]:
+#         line = line.split(',')
+#         filter_line = ','.join(filter(None, line))  This is a prototye for testing the limiting of my commas 
+#         print(filter_line)
 
 # Class to hold information about a race entry      
 
@@ -75,9 +75,8 @@ class Info:
         self.pgain = entries[6]
         self.valid = True
 
+
 inlist = []
-
-
 
 # Limits the commas to one instead of many 
 
@@ -88,6 +87,9 @@ for race in races:
         line = line.split(',')
         filter_line = ','.join(filter(None, line))
         race_info = Info(filter_line)
+
+        #If the data is broken as in there is less than 10 it tells us which data is broken
+        
         if not race_info.valid:
             print(f'Invalid race info: {race_info.broken}')
             continue
