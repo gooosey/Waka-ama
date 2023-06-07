@@ -1,6 +1,6 @@
 import os
 
-year = '201'
+year = '2018'
 racetype = "Final"
 races = []
 
@@ -66,13 +66,6 @@ def assign_points(place):
     else:
         return 1
 
-# for race in races:
-#     lines = race.split('\n')
-#     for line in lines[1:]:
-#         line = line.split(',')
-#         filter_line = ','.join(filter(None, line))  This is a prototye for testing the limiting of my commas 
-#         print(filter_line)
-
 # Class to hold information about a race entry      
 
 class Info:
@@ -110,9 +103,30 @@ for race in races:
             continue
         inlist.append(race_info)
 
-# print club and place(has points already assigned)
+# Create a dictionary to store club names and their total points
 
+club_points = {}
 
-for race_info in inlist:
-    print(f"{race_info.club}, {race_info.points}")
+# Loop over the races and process the data
+for race in races:
+    lines = race.split('\n')
+    for line in lines[1:]:
+        line = line.split(',')
+        filter_line = ','.join(filter(None, line))
+        race_info = Info(filter_line)
 
+        # If the data is broken, skip it
+        if not race_info.valid:
+            continue
+
+        # Check if the club already exists in the dictionary
+        if race_info.club in club_points:
+            # If it exists, add the points to the existing value
+            club_points[race_info.club] += race_info.points
+        else:
+            # If it doesn't exist, create a new entry in the dictionary
+            club_points[race_info.club] = race_info.points
+
+# Print club names and total points
+for club, points in club_points.items():
+    print(f"{club}: {points} points")
