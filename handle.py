@@ -134,4 +134,3 @@ for race in races:
 # Print club names and total points
 for club, points in club_points.items():
     print(f"{club}: {points} points")
-
