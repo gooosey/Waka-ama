@@ -91,7 +91,7 @@ for race in races:
         #If the data is broken as in there is less than 10 it tells us which data is broken
         
         if not race_info.valid:
-            print(f'Invalid race info: {race_info.broken}')
+            # print(f'Invalid race info: {race_info.broken}')
             continue
         inlist.append(race_info)
 
