@@ -47,10 +47,10 @@ def find_files(race, folder_path):
 find_folder(year, racetype, "resources") 
 
 #Create a function to calculate the points of the races
-
+#if place is 1 they get 8 points if they are 2nd they get 7 points it get lower by one until 7th place any below that the particpates will gain 1 point
 def assign_points(place):
     if place == 1:
-        return 8
+        return 8 
     elif place == 2:
         return 7
     elif place == 3:
@@ -132,5 +132,7 @@ for race in races:
             club_points[race_info.club] = race_info.points
 
 # Print club names and total points
-for club, points in club_points.items():
+# for club, points in club_points.items():
+#     print(f"{club}: {points} points")
+for club, points in sorted(club_points.items(), key=lambda x: x[1], reverse=True):
     print(f"{club}: {points} points")
