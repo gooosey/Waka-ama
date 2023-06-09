@@ -1,6 +1,9 @@
 import os
+import csv
 
-year = '2017'
+
+#items to search for items change if want diffent outcomes
+year = '2018'
 racetype = "Final"
 races = []
 
@@ -20,7 +23,7 @@ def read_file(file_path):
     print(f"Oops! Something went wrong with file: {file_path}")
     return None
 
-# Function to read the contents of a file
+# Function to read the contents of a file (year)
 
 def find_folder(year, race, folder_path):
     abs_path = os.path.abspath(folder_path)
@@ -33,7 +36,7 @@ def find_folder(year, race, folder_path):
                 dir_path = os.path.join(abs_path, dir)
                 find_files(race, dir_path) 
 
-# Function to find files with the given race type in a folder
+# Function to find files with the given keyword in a folder
 
 def find_files(race, folder_path):
     for root, dirs, files in os.walk(folder_path):
@@ -46,8 +49,10 @@ def find_files(race, folder_path):
 
 find_folder(year, racetype, "resources") 
 
-#Create a function to calculate the points of the races
-#if place is 1 they get 8 points if they are 2nd they get 7 points it get lower by one until 7th place any below that the particpates will gain 1 point
+# Create a function to calculate the points of the races
+# If the place is 1, they get 8 points. If they are 2nd, they get 7 points. Points decrease by one until 7th place.
+# Any place below 7th will earn 1 point.
+
 def assign_points(place):
     if place == 1:
         return 8 
@@ -82,21 +87,21 @@ class Info:
         self.points = assign_points(int(self.place))
         self.valid = True
 
-#is going to hold the data
+# List to hold the infomation about the race
 
 inlist = []
 
-# Limits the commas to one instead of many 
+# Runs the race data
 
 for race in races:
     lines = race.split('\n')
 
-    for line in lines[1:]:
+    for line in lines[1:]: # Misses the first line
         line = line.split(',')
-        filter_line = ','.join(filter(None, line))
+        filter_line = ','.join(filter(None, line)) # These 3 lines limits the commas it can have in the data
         race_info = Info(filter_line)
 
-        #If the data is broken as in there is less than 10 it tells us which data is broken
+        # If the data is broken as in there is less than 10 it tells us which data is broken
         
         if not race_info.valid:
             # print(f'gone {race_info.broken}') 
@@ -109,9 +114,12 @@ for race in races:
 # for race_info in inlist:
 #     print(race_info.club, race_info.place)  #test
 
+# Create a dictionary to store club names and their total points
+
 club_points = {}
 
 # Loop over the races and process the data
+
 for race in races:
     lines = race.split('\n')
     for line in lines[1:]:
@@ -134,5 +142,19 @@ for race in races:
 # Print club names and total points
 # for club, points in club_points.items():
 #     print(f"{club}: {points} points")
-for club, points in sorted(club_points.items(), key=lambda x: x[1], reverse=True):
-    print(f"{club}: {points} points")
+
+# Function to download the results into csv file
+
+def dlcsv():
+
+    # Sorts the data in decending order
+
+    sorted_data = sorted(club_points.items(), key=lambda x: x[1], reverse=True)
+
+    # Write the sorted data into a CSV file 
+    with open('finalresult.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        for club,points in sorted_data:
+            writer.writerow([f'{club}: {points} Points'])
+
+dlcsv()
