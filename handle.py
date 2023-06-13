@@ -1,9 +1,10 @@
 import os
 import csv
+from tkinter import *
 
 
 #items to search for items change if want diffent outcomes
-year = '2018'
+year = '2017'
 racetype = "Final"
 races = []
 
@@ -44,10 +45,11 @@ def find_files(race, folder_path):
             if race in file:               
                 file_path = os.path.join(folder_path, file)
                 races.append(read_file(file_path))
-
 # Call the find_folder function to search for files          
 
+
 find_folder(year, racetype, "resources") 
+
 
 # Create a function to calculate the points of the races
 # If the place is 1, they get 8 points. If they are 2nd, they get 7 points. Points decrease by one until 7th place.
@@ -68,6 +70,8 @@ def assign_points(place):
         return 3
     elif place == 7:
         return 2
+    elif place == 0:
+        return 0
     else:
         return 1
 
@@ -79,6 +83,7 @@ class Info:
 
         if len(entries) < 10:
             self.broken = entries
+            self.place = 0
             self.valid = False
             return
         
@@ -102,9 +107,9 @@ for race in races:
         race_info = Info(filter_line)
 
         # If the data is broken as in there is less than 10 it tells us which data is broken
-        
+
         if not race_info.valid:
-            # print(f'gone {race_info.broken}') 
+            print(f'gone {race_info.broken}') 
             continue
         inlist.append(race_info)
 
@@ -157,4 +162,8 @@ def dlcsv():
         for club,points in sorted_data:
             writer.writerow([f'{club}: {points} Points'])
 
-dlcsv()
+dlcsv() 
+
+# root = Tk()
+# root.mainloop()
+
