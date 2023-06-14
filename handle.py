@@ -1,6 +1,7 @@
 import os
 import csv
 from tkinter import *
+import customtkinter #tkinkter assister
 
 
 #items to search for items change if want diffent outcomes
@@ -11,13 +12,14 @@ races = []
 # Function to read the contents of a file
 
 def read_file(file_path):
-    encodings = ['utf-8','latin-1'] # File containing these encoding
+    encodings = ['utf-8', 'latin-1', 'utf-16']  # File containing these encodings
+    placeholder = "'"  # Placeholder character to replace invalid characters
     
     for encoding in encodings:
         try:
-            with open(file_path, 'r', encoding=encoding) as file:
+            with open(file_path, 'r', encoding=encoding, errors='replace') as file:
                 file_content = file.read()
-            return file_content
+            return file_content.replace('\ufffd', placeholder)
         except UnicodeDecodeError:
             continue
     
@@ -45,6 +47,8 @@ def find_files(race, folder_path):
             if race in file:               
                 file_path = os.path.join(folder_path, file)
                 races.append(read_file(file_path))
+                print(file_path)
+
 # Call the find_folder function to search for files          
 
 
@@ -56,38 +60,21 @@ find_folder(year, racetype, "resources")
 # Any place below 7th will earn 1 point.
 
 def assign_points(place):
-    if place == 1:
-        return 8 
-    elif place == 2:
-        return 7
-    elif place == 3:
-        return 6
-    elif place == 4:
-        return 5
-    elif place == 5:
-        return 4
-    elif place == 6:
-        return 3
-    elif place == 7:
-        return 2
-    elif place == 0:
-        return 0
-    else:
-        return 1
+    points = [0, 8, 7, 6, 5, 4, 3, 2]
+    return points[place] if place < len(points) else 1
 
 # Class to hold information about a race entry      
 
 class Info:
     def __init__(self, line):
-        entries = [entry.strip() for entry in line.split(',')]
+        entries = [entry.strip() for entry in line.split(',')] #Skips the disqualification data
 
-        if len(entries) < 10:
+        if len(entries) < 10: #Only happnes if there is less than 10 entries 
             self.broken = entries
-            self.place = 0
             self.valid = False
             return
         
-        self.place = entries[0]
+        self.place = entries[0] if entries[0] else '0'
         self.club = entries[4]
         self.points = assign_points(int(self.place))
         self.valid = True
@@ -101,20 +88,12 @@ inlist = []
 for race in races:
     lines = race.split('\n')
 
-    for line in lines[1:]: # Misses the first line
-        line = line.split(',')
-        filter_line = ','.join(filter(None, line)) # These 3 lines limits the commas it can have in the data
-        race_info = Info(filter_line)
-
-        # If the data is broken as in there is less than 10 it tells us which data is broken
-
-        if not race_info.valid:
-            print(f'gone {race_info.broken}') 
-            continue
+    for line in lines[1:]:
+        entries = [entry.strip() for entry in line.split(',')]
+        filter_line = ','.join(filter(None, entries))
+        race_info = Info(line)
+        #Appeds the data
         inlist.append(race_info)
-
-# Create a dictionary to store club names and their total points
-
 
 # for race_info in inlist:
 #     print(race_info.club, race_info.place)  #test
@@ -162,8 +141,13 @@ def dlcsv():
         for club,points in sorted_data:
             writer.writerow([f'{club}: {points} Points'])
 
-dlcsv() 
+# dlcsv() 
 
-# root = Tk()
-# root.mainloop()
+root = customtkinter.CTk()
+root.title("login")
+root.geometry("350x200")
+root.resizable(False)
+
+
+root.mainloop()
 
