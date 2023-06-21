@@ -3,6 +3,7 @@ import csv
 from tkinter import *
 import customtkinter #tkinkter assister
 from tkinter import messagebox
+from customtkinter import CTkToplevel
 
 
 #items to search for items change if want diffent outcomes
@@ -144,77 +145,75 @@ def dlcsv():
 
 # dlcsv() 
 
-# Making the window
+class apps:
+    def __init__(self):
+        # Window information
+        self.root = customtkinter.CTk()
+        self.root.title("login")
+        self.root.geometry("350x200")
+        self.root.config(bg='#242320')
+        self.root.eval('tk::PlaceWindow . center')
 
-root = customtkinter.CTk()
-root.title("login")
-root.geometry("350x200")
-root.config(bg='#242320')
+        # Fonts
+        self.font1 = ('Arial', 15, 'bold')
 
-# Fonts
+        # Username and password
+        self.username = 'J'
+        self.password = 'K'
 
-font1 = ('Arial', 15, 'bold') 
+        # Trials
+        self.trials = 0
 
-# Username and passwords
+        # Creating the label for username and password
+        self.userlabel = customtkinter.CTkLabel(self.root, text="Username:", font=self.font1, text_color="#FFFFFF")
+        self.userlabel.place(x=15, y=25)
 
-username = 'J'
-password = 'K'
+        self.passlabel = customtkinter.CTkLabel(self.root, text="Password:", font=self.font1, text_color="#FFFFFF")
+        self.passlabel.place(x=15, y=75)
 
-# 3 Trials
+        # Creating a text box for username and password
+        self.userentry = customtkinter.CTkEntry(self.root, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
+                                                border_color="#FFFFFF", text_color="#000000", width=200)
+        self.userentry.place(x=100, y=26.912831241924)
 
-trials = 0
+        self.passentry = customtkinter.CTkEntry(self.root, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
+                                                border_color="#FFFFFF", text_color="#000000", width=200)
+        self.passentry.place(x=100, y=76.912831241924)
 
-#login
+        # Login Button
+        self.loginbu = customtkinter.CTkButton(self.root, text="Login", font=self.font1, text_color="#FFFFFF",
+                                               fg_color="#07b527", hover_color="#07b527", command=self.login)
+        self.loginbu.place(x=110, y=132.5)
 
-from tkinter import messagebox, Toplevel
+        self.root.mainloop()
 
-def login():
-    global username
-    global password
-    global trials
+    def login(self):
+        written_user = self.userentry.get()
+        written_pass = self.passentry.get()
 
-    written_user = userentry.get()
-    written_pass = passentry.get()
+        if written_user == '' or written_pass == '':
+            messagebox.showwarning(title="Error", message="Enter username and password")
+        elif written_user == self.username and written_pass == self.password:
+            self.mainwin()
+        elif (written_user != self.username or written_pass != self.password) and self.trials < 3:
+            messagebox.showwarning(title="Error", message="Invalid username or password")
+            self.trials += 1
+        else:
+            self.loginbu.destroy()  # Destroy the login button
+            triallabel = customtkinter.CTkLabel(self.root, text="Too many failed attempts", font=self.font1,
+                                                text_color="#FFFFFF")
+            triallabel.place(x=80, y=132.5)
 
-    if written_user == '' or written_pass == '':
-        messagebox.showwarning(title="Error", message="Enter username and password")
-    elif written_user == username and written_pass == password:
-        newwin = Toplevel(root)
+    def mainwin(self):
+        newwin = CTkToplevel(self.root)
         newwin.geometry("350x200")
         newwin.config(bg="#242320")
-        wellabel = customtkinter.CTkLabel(newwin, text="Welcome....", font=font1, text_color="#FFFFFF")
+        newwin.title("Main Data")
+
+        wellabel = customtkinter.CTkLabel(newwin, text="Welcome....", font=self.font1, text_color="#FFFFFF")
         wellabel.place(x=100, y=100)
-    elif (written_user != username or written_pass != password) and trials < 3:
-        messagebox.showwarning(title="Error", message="Invalid username or password")
-        trials += 1
-        if trials != 3:
-            triallabel = customtkinter.CTkLabel(root, text=f"You have {3 - trials} trials", font=font1, text_color="#FFFFFF")
-            triallabel.place(x=100, y=160)
-        else:
-            loginbu.destroy()  # Destroy the login button
-            triallabel = customtkinter.CTkLabel(root, text="It's locked", font=font1, text_color="#FFFFFF")
-            triallabel.place(x=100, y=160)
 
+        newwin.mainloop()
 
-# Creating the label for username and password
-
-userlabel = customtkinter.CTkLabel(root, text="Username:", font = font1, text_color="#FFFFFF")
-userlabel.place(x=15, y=25)
-
-passlabel = customtkinter.CTkLabel(root, text="Password:", font = font1, text_color="#FFFFFF")
-passlabel.place(x=15 ,y=75)
-
-# Creating a text box for username and password
-userentry = customtkinter.CTkEntry(root, fg_color="#FFFFFF", bg_color="#000000", font=font1, border_color="#FFFFFF", text_color="#000000", width=200)
-userentry.place(x=100, y=26.912831241924)
-
-passentry = customtkinter.CTkEntry(root, fg_color="#FFFFFF", bg_color="#000000", font=font1, border_color="#FFFFFF", text_color="#000000", width=200)
-passentry.place(x=100, y=76.912831241924)
-
-# Login Button
-loginbu = customtkinter.CTkButton(root, text="Login", font = font1, text_color="#FFFFFF", fg_color="#07b527", hover_color="#07b527", command=login)
-loginbu.place(x=110, y=132.5)
-
-
-root.mainloop()
-
+# Create an instance of the class
+app = apps()
