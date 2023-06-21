@@ -6,9 +6,11 @@ from tkinter import messagebox
 from customtkinter import CTkToplevel
 
 
+
 #items to search for items change if want diffent outcomes
-year = '2017'
+year = "2017"
 racetype = "Final"
+file = "/Users/goose/Desktop/3.7B resource files"
 races = []
 
 # Function to read the contents of a file
@@ -54,7 +56,7 @@ def find_files(race, folder_path):
 # Call the find_folder function to search for files          
 
 
-find_folder(year, racetype, "resources") 
+find_folder(year, racetype, file) 
 
 
 # Create a function to calculate the points of the races
@@ -137,7 +139,8 @@ def dlcsv():
 
     sorted_data = sorted(club_points.items(), key=lambda x: x[1], reverse=True)
 
-    # Write the sorted data into a CSV file 
+    # Write the sorted data into a CSV file
+ 
     with open('finalresult.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         for club,points in sorted_data:
@@ -147,7 +150,9 @@ def dlcsv():
 
 class apps:
     def __init__(self):
+
         # Window information
+
         self.root = customtkinter.CTk()
         self.root.title("login")
         self.root.geometry("350x200")
@@ -156,8 +161,10 @@ class apps:
 
         # Fonts
         self.font1 = ('Arial', 15, 'bold')
+        self.font2 = ('Helvetica', 35, 'bold')
 
         # Username and password
+
         self.username = 'J'
         self.password = 'K'
 
@@ -165,6 +172,7 @@ class apps:
         self.trials = 0
 
         # Creating the label for username and password
+
         self.userlabel = customtkinter.CTkLabel(self.root, text="Username:", font=self.font1, text_color="#FFFFFF")
         self.userlabel.place(x=15, y=25)
 
@@ -172,6 +180,7 @@ class apps:
         self.passlabel.place(x=15, y=75)
 
         # Creating a text box for username and password
+
         self.userentry = customtkinter.CTkEntry(self.root, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
                                                 border_color="#FFFFFF", text_color="#000000", width=200)
         self.userentry.place(x=100, y=26.912831241924)
@@ -181,6 +190,7 @@ class apps:
         self.passentry.place(x=100, y=76.912831241924)
 
         # Login Button
+
         self.loginbu = customtkinter.CTkButton(self.root, text="Login", font=self.font1, text_color="#FFFFFF",
                                                fg_color="#07b527", hover_color="#07b527", command=self.login)
         self.loginbu.place(x=110, y=132.5)
@@ -200,20 +210,27 @@ class apps:
             self.trials += 1
         else:
             self.loginbu.destroy()  # Destroy the login button
-            triallabel = customtkinter.CTkLabel(self.root, text="Too many failed attempts", font=self.font1,
-                                                text_color="#FFFFFF")
+            triallabel = customtkinter.CTkLabel(self.root, text="Too many failed attempts", font=self.font1,text_color="#FFFFFF")
             triallabel.place(x=80, y=132.5)
 
     def mainwin(self):
-        newwin = CTkToplevel(self.root)
-        newwin.geometry("350x200")
-        newwin.config(bg="#242320")
-        newwin.title("Main Data")
 
-        wellabel = customtkinter.CTkLabel(newwin, text="Welcome....", font=self.font1, text_color="#FFFFFF")
-        wellabel.place(x=100, y=100)
+        # General information about the window
+
+        newwin = CTkToplevel(self.root)
+        newwin.geometry("{0}x{1}+0+0".format(newwin.winfo_screenwidth(), newwin.winfo_screenheight()))
+        newwin.config(bg="#242320")
+        newwin.title("Waka-ama")
+        newwin.resizable(0,0)
+
+        # Label
+
+        wellabel = customtkinter.CTkLabel(newwin, text="Welcome to results", font=self.font2 ,text_color="#FFFFFF", width=100, height=100)
+        wellabel.place(x=700, y=80)
+
+        # Start the new window
 
         newwin.mainloop()
 
-# Create an instance of the class
+
 app = apps()
