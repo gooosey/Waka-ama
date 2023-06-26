@@ -10,7 +10,6 @@ from customtkinter import CTkToplevel
 #items to search for items change if want diffent outcomes
 year = "2017"
 racetype = "Final"
-file = "/Users/goose/Desktop/3.7B resource files"
 races = []
 
 # Function to read the contents of a file
@@ -56,7 +55,7 @@ def find_files(race, folder_path):
 # Call the find_folder function to search for files          
 
 
-find_folder(year, racetype, file) 
+find_folder(year, racetype, "resources") 
 
 
 # Create a function to calculate the points of the races
