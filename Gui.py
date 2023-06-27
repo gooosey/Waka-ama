@@ -3,13 +3,8 @@ from tkinter import filedialog
 from tkinter import messagebox
 import customtkinter as ctk
 import os
-import csv
-from tkinter import *
-import customtkinter #tkinkter assister
-from tkinter import messagebox
+import csv 
 from customtkinter import CTkToplevel
-from tkinter import filedialog
-import customtkinter as ctk
 
 
 class apps:
@@ -26,8 +21,8 @@ class apps:
         self.font2 = ('Helvetica', 35, 'bold')
 
         # Username and password
-        self.username = 'J'
-        self.password = 'K'
+        self.username = 'Waka-ama1'
+        self.password = 'wakarizz'
 
         # Trials
         self.trials = 0
@@ -44,7 +39,7 @@ class apps:
                                       border_color="#FFFFFF", text_color="#000000", width=200)
         self.userentry.place(x=100, y=26)
 
-        self.passentry = ctk.CTkEntry(self.root, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
+        self.passentry = ctk.CTkEntry(self.root, show="ඞ", fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
                                       border_color="#FFFFFF", text_color="#000000", width=200)
         self.passentry.place(x=100, y=76)
 
@@ -74,7 +69,6 @@ class apps:
             triallabel.place(x=80, y=132.5)
 
     def mainwin(self):
-        global year, racetype, resources
         # General information about the window
         newwin = ctk.CTkToplevel(self.root)
         newwin.geometry('500x500+{:d}+{:d}'.format(
@@ -134,15 +128,15 @@ class apps:
                                   border_color="#FFFFFF", text_color="#000000", width=200)
         Ykword.place(x = 150 , y = 260)
 
-        # Give this into a variable 
-
+        # display stuff
+        
         #stuff
         def dlcsv():
             year = Ykword.get()
             racetype = kkword.get()
             resources = file_entry.get()
             races = []
-
+            filename = []
 
             def read_file(file_path):
                 # Tells the user if it exceeds 4 digits
@@ -183,12 +177,26 @@ class apps:
             def find_files(race, folder_path):
                 for root, dirs, files in os.walk(folder_path):
                     for file in files:
-                        if race in file:               
+                        if race in file:
                             file_path = os.path.join(folder_path, file)
                             races.append(read_file(file_path))
 
+                            
+
             find_folder(year, racetype, resources) 
 
+            file_label = ctk.CTkLabel(newwin, text="Files:", font=('Arial', 15, 'bold'))
+            file_label.place(x=100, y=100)
+
+            y_offset = file_label.winfo_height() + 10  # Vertical offset for file name labels
+
+            for file_path in filename:
+                file_name = os.path.basename(file_path)
+                file_name_label = ctk.CTkLabel(newwin, text=file_name, font=('Arial', 12))
+                file_name_label.place(x=100, y=y_offset)
+                y_offset += file_name_label.winfo_height() + 5
+
+        
 
             if not races:
                 messagebox.showwarning(title="Error", message="Inviald. Make sure you have correct information")
@@ -230,9 +238,6 @@ class apps:
                     #Appeds the data
                     inlist.append(race_info)
 
-            # for race_info in inlist:
-            #     print(race_info.club, race_info.place)  #test
-
             # Create a dictionary to store club names and their total points
 
             club_points = {}
@@ -267,15 +272,18 @@ class apps:
                     writer = csv.writer(file)
                     for club, points in sorted_data:
                         writer.writerow([f'{club}: {points} Points'])
-
+                        
         # Submit button
         submit_button = ctk.CTkButton(newwin, text="Submit", font=self.font1, text_color="#FFFFFF",
                                     fg_color="#07b527", hover_color="#07b527",
                                     command=dlcsv)
+    
         
         submit_button.place(x=220, y=300)
+        
 
         newwin.mainloop()
 
 
 app = apps()
+
