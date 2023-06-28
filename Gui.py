@@ -1,3 +1,4 @@
+# Import
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -5,7 +6,12 @@ import customtkinter as ctk
 import os
 import csv 
 from customtkinter import CTkToplevel
+import time
 
+# Customtkinter 5.2.0
+# Python 3.11.4
+
+# File hangling + Gui
 
 class apps:
     def __init__(self):
@@ -14,7 +20,8 @@ class apps:
         self.root.title("login")
         self.root.geometry("350x200")
         self.root.config(bg='#242320')
-        self.root.eval('tk::PlaceWindow . center')
+        self.root.eval('tk::PlaceWindow . center')# Place window in centre
+        self.root.resizable(0,0)
 
         # Fonts
         self.font1 = ('Arial', 15, 'bold')
@@ -35,38 +42,36 @@ class apps:
         self.passlabel.place(x=15, y=75)
 
         # Creating a text box for username and password
-        self.userentry = ctk.CTkEntry(self.root, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
-                                      border_color="#FFFFFF", text_color="#000000", width=200)
+        self.userentry = ctk.CTkEntry(self.root, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,border_color="#FFFFFF", text_color="#000000", width=200)
         self.userentry.place(x=100, y=26)
 
-        self.passentry = ctk.CTkEntry(self.root, show="ඞ", fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
-                                      border_color="#FFFFFF", text_color="#000000", width=200)
+        self.passentry = ctk.CTkEntry(self.root, text="ඞ", fg_color="#FFFFFF", bg_color="#000000", font=self.font1, border_color="#FFFFFF", text_color="#000000", width=200)
         self.passentry.place(x=100, y=76)
 
         # Login Button
-        self.loginbu = ctk.CTkButton(self.root, text="Login", font=self.font1, text_color="#FFFFFF",
-                                     fg_color="#07b527", hover_color="#07b527", command=self.login)
+        self.loginbu = ctk.CTkButton(self.root, text="Login", font=self.font1, text_color="#FFFFFF", fg_color="#07b527", hover_color="#07b527", command=self.login)
         self.loginbu.place(x=110, y=132.5)
 
         self.root.mainloop()
 
-        # Login logic
-
+    # Login logic
     def login(self):
         written_user = self.userentry.get()
         written_pass = self.passentry.get()
 
         if written_user == '' or written_pass == '':
-            messagebox.showwarning(title="Error", message="Enter username and password")
+            messagebox.showwarning(title="Error", message="Enter username and password") # Display if user doesnt enter anything
         elif written_user == self.username and written_pass == self.password:
             self.mainwin()
         elif (written_user != self.username or written_pass != self.password) and self.trials < 3:
-            messagebox.showwarning(title="Error", message="Invalid username or password")
+            messagebox.showwarning(title="Error", message="Invalid username or password") # Display when Invaild info
             self.trials += 1
         else:
             self.loginbu.destroy()  # Destroy the login button
             triallabel = ctk.CTkLabel(self.root, text="Too many failed attempts", font=self.font1, text_color="#FFFFFF")
             triallabel.place(x=80, y=132.5)
+
+    # Start new window  
 
     def mainwin(self):
         # General information about the window
@@ -78,9 +83,6 @@ class apps:
         newwin.config(bg="#242320")
         newwin.title("Waka-ama")
         newwin.resizable(0, 0)
-
-        #Stuff
-
 
         # Label
         wellabel = ctk.CTkLabel(newwin, text="Welcome to results", font=self.font2, text_color="#FFFFFF",
@@ -97,7 +99,7 @@ class apps:
         file_label = ctk.CTkLabel(newwin, text="Folder Location:", font=self.font1, text_color="#FFFFFF")
         file_label.place(x=15, y=100)
         file_entry = ctk.CTkEntry(newwin, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
-                                  border_color="#FFFFFF", text_color="#000000", width=300)
+                                  border_color="#FFFFFF", text_color="#000000", width=315)
         file_entry.place(x=150, y=101)
 
         # Select folder button
@@ -107,30 +109,24 @@ class apps:
         select_button.place(x=150, y=130)
 
         # Find keyword
-
         kword = ctk.CTkLabel(newwin, text="Enter Keyword:", font=self.font1, text_color="#FFFFFF")
-        kword.place(x =15, y = 185)
+        kword.place(x=15, y=185)
 
         # User type
-
         kkword = ctk.CTkEntry(newwin, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
                                   border_color="#FFFFFF", text_color="#000000", width=200)
-        kkword.place(x=150, y=185 )
+        kkword.place(x=150, y=185)
 
         # Another Key word
-
         Yword = ctk.CTkLabel(newwin, text="Enter year:", font=self.font1, text_color="#FFFFFF")
-        Yword.place(x =30, y = 260)
+        Yword.place(x=30, y=260)
 
         # User type
-
         Ykword = ctk.CTkEntry(newwin, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
                                   border_color="#FFFFFF", text_color="#000000", width=200)
-        Ykword.place(x = 150 , y = 260)
+        Ykword.place(x=150, y=260)
 
-        # display stuff
-        
-        #stuff
+        # Submit button
         def dlcsv():
             year = Ykword.get()
             racetype = kkword.get()
@@ -144,10 +140,9 @@ class apps:
                     messagebox.showwarning(title="Error", message="Please enter 4 digits")
                     return
 
-
                 encodings = ['utf-8', 'latin-1', 'utf-16']  # File containing these encodings
                 placeholder = "'"  # Placeholder character to replace invalid characters
-                
+
                 for encoding in encodings:
                     try:
                         with open(file_path, 'r', encoding=encoding, errors='replace') as file:
@@ -155,79 +150,81 @@ class apps:
                         return file_content.replace('\ufffd', placeholder)
                     except UnicodeDecodeError:
                         continue
-                
+
                 print(f"Oops! Something went wrong with file: {file_path}")
                 return None
 
             # Function to read the contents of a file (year)
-
             def find_folder(year, race, folder_path):
                 abs_path = os.path.abspath(folder_path)
-                
-                # Walk through the directory tree
 
+                # Walk through the directory tree
                 for root, dirs, files in os.walk(abs_path):
                     for dir in dirs:
                         if year in dir:
                             dir_path = os.path.join(abs_path, dir)
-                            find_files(race, dir_path) 
+                            find_files(race, dir_path)
 
             # Function to find files with the given keyword in a folder
-
             def find_files(race, folder_path):
                 for root, dirs, files in os.walk(folder_path):
                     for file in files:
                         if race in file:
                             file_path = os.path.join(folder_path, file)
                             races.append(read_file(file_path))
+                            filename.append(file_path)
 
-                            
+            find_folder(year, racetype, resources)
 
-            find_folder(year, racetype, resources) 
+            # Read file
 
-            file_label = ctk.CTkLabel(newwin, text="Files:", font=('Arial', 15, 'bold'))
-            file_label.place(x=100, y=100)
+            def display_filenames(filenames):
+                if filenames:
+                    filename = filenames[0]
+                    filenames = filenames[1:]  # Remove the first filename from the list
 
-            y_offset = file_label.winfo_height() + 10  # Vertical offset for file name labels
+                    # Display the filename
+                    file_label = ctk.CTkLabel(newwin, text=os.path.basename(filename), font=self.font1, text_color="#FFFFFF")
+                    file_label.place(x=80, y=300)
 
-            for file_path in filename:
-                file_name = os.path.basename(file_path)
-                file_name_label = ctk.CTkLabel(newwin, text=file_name, font=('Arial', 12))
-                file_name_label.place(x=100, y=y_offset)
-                y_offset += file_name_label.winfo_height() + 5
+                    # Schedule the deletion of the label after a certain delay
 
-        
+                    newwin.after(10, file_label.destroy)  # Adjust the delay as needed
+
+                    # Call the function again with the remaining filenames
+
+                    newwin.after(10, display_filenames, filenames)  # Adjust the delay as needed
+
+            # Call the function with the list of filenames
+            display_filenames(filename)
 
             if not races:
-                messagebox.showwarning(title="Error", message="Inviald. Make sure you have correct information")
+                messagebox.showwarning(title="Error", message="Invalid. Make sure you have correct information")
                 return
 
             def assign_points(place):
                 points = [0, 8, 7, 6, 5, 4, 3, 2]
                 return points[place] if place < len(points) else 1
 
-            # Class to hold information about a race entry      
-
+            # Class to hold information about a race entry
             class Info:
                 def __init__(self, line):
-                    entries = [entry.strip() for entry in line.split(',')] #Skips the disqualification data
+                    entries = [entry.strip() for entry in line.split(',')] # Skips the disqualification data
 
-                    if len(entries) < 10: #Only happnes if there is less than 10 entries 
+                    if len(entries) < 10: # Only happens if there are less than 10 entries
                         self.broken = entries
                         self.valid = False
                         return
-                    
+
                     self.place = entries[0] if entries[0] else '0'
                     self.club = entries[4]
                     self.points = assign_points(int(self.place))
                     self.valid = True
 
-            # List to hold the infomation about the race
-
+            # List to hold the information about the race
             inlist = []
 
             # Runs the race data
-
             for race in races:
                 lines = race.split('\n')
 
@@ -235,15 +232,13 @@ class apps:
                     entries = [entry.strip() for entry in line.split(',')]
                     filter_line = ','.join(filter(None, entries))
                     race_info = Info(line)
-                    #Appeds the data
+                    #Appends the data
                     inlist.append(race_info)
 
             # Create a dictionary to store club names and their total points
-
             club_points = {}
 
             # Loop over the races and process the data
-
             for race in races:
                 lines = race.split('\n')
                 for line in lines[1:]:
@@ -264,26 +259,24 @@ class apps:
                         club_points[race_info.club] = race_info.points
 
                 # Sorts the data in descending order
-                
                 sorted_data = sorted(club_points.items(), key=lambda x: x[1], reverse=True)
 
-                # Write the sorted data into a CSV file
-                with open('finalresult.csv', 'w', newline='') as file:
-                    writer = csv.writer(file)
+                # Write the sorted data to a CSV file
+                with open('result.csv', 'w', newline='') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(['Club Name', 'Total Points'])
+
                     for club, points in sorted_data:
-                        writer.writerow([f'{club}: {points} Points'])
-                        
+                        writer.writerow([club, points])
+
         # Submit button
         submit_button = ctk.CTkButton(newwin, text="Submit", font=self.font1, text_color="#FFFFFF",
-                                    fg_color="#07b527", hover_color="#07b527",
-                                    command=dlcsv)
-    
-        
-        submit_button.place(x=220, y=300)
-        
+                                      fg_color="#07b527", hover_color="#07b527",
+                                      command=dlcsv)
+        submit_button.place(x=215, y= 300)
 
         newwin.mainloop()
 
+# start
 
-app = apps()
-
+apps()
