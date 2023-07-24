@@ -19,7 +19,7 @@ import time
 class apps:
     def __init__(self):
         # Window information
-        self.root = ctk.CTk()
+        self.root = ctk.CTk();
         self.root.title("login")
         self.root.geometry("350x200")
         self.root.config(bg='#242320')
@@ -34,7 +34,7 @@ class apps:
         self.username = 'Waka-ama1'
         self.password = 'wakarizz'
 
-        # Trials
+        # Trials for user
         self.trials = 0
 
         # Creating the label for username and password
@@ -55,13 +55,16 @@ class apps:
         self.loginbu = ctk.CTkButton(self.root, text="Login", font=self.font1, text_color="#FFFFFF", fg_color="#07b527", hover_color="#07b527", command=self.login)
         self.loginbu.place(x=110, y=132.5)
 
+        # Start login page
         self.root.mainloop()
 
     # Login logic
     def login(self):
+        # Get user input and change into vairable
         written_user = self.userentry.get()
         written_pass = self.passentry.get()
 
+        # If user doesnt eneter anything into the input
         if written_user == '' or written_pass == '':
             messagebox.showwarning(title="Error", message="Enter username and password") # Display if user doesnt enter anything
         elif written_user == self.username and written_pass == self.password:
@@ -87,7 +90,7 @@ class apps:
         newwin.title("Waka-ama")
         newwin.resizable(0, 0)
 
-        # Label
+        # Label when entering into gui
         wellabel = ctk.CTkLabel(newwin, text="Welcome to results", font=self.font2, text_color="#FFFFFF",
                                 width=100, height=100)
         wellabel.place(x=85, y=0)
@@ -100,7 +103,7 @@ class apps:
 
         # File location entry
         file_label = ctk.CTkLabel(newwin, text="Folder Location:", font=self.font1, text_color="#FFFFFF")
-        file_label.place(x=15, y=100)
+        file_label.place(x=7, y=100)
         file_entry = ctk.CTkEntry(newwin, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
                                   border_color="#FFFFFF", text_color="#000000", width=315)
         file_entry.place(x=150, y=101)
@@ -111,7 +114,7 @@ class apps:
                                       command=lambda: select_folder(file_entry))
         select_button.place(x=150, y=130)
 
-        # Find keyword
+        # Find keyword variable 
         kword = ctk.CTkLabel(newwin, text="Enter Keyword:", font=self.font1, text_color="#FFFFFF")
         kword.place(x=15, y=185)
 
@@ -120,14 +123,14 @@ class apps:
                                   border_color="#FFFFFF", text_color="#000000", width=200)
         kkword.place(x=150, y=185)
 
-        # Another Key word
+        # Find Year vairable
         Yword = ctk.CTkLabel(newwin, text="Enter year:", font=self.font1, text_color="#FFFFFF")
-        Yword.place(x=30, y=260)
+        Yword.place(x=48, y=260)
 
         # User type
         Ykword = ctk.CTkEntry(newwin, fg_color="#FFFFFF", bg_color="#000000", font=self.font1,
                                   border_color="#FFFFFF", text_color="#000000", width=200)
-        Ykword.place(x=150, y=260)
+        Ykword.place(x=150, y=262)
 
         # Submit button
         def dlcsv():
@@ -278,19 +281,31 @@ class apps:
                 # Sorts the data in descending order
                 sorted_data = sorted(club_points.items(), key=lambda x: x[1], reverse=True)
 
-                # Write the sorted data to a CSV file
+                # Downloaded files on destop
 
-                with open('result.csv', 'w', newline='') as csvfile:
+                file_name = "waka-ama_results.csv"
+                dpath = os.path.join(os.path.expanduser("~"), "Desktop")
+                file_path = os.path.join(dpath, file_name)
+
+                # Download file
+
+                with open(file_path, 'w', newline='') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(['Club Name', 'Total Points'])
 
                     for club, points in sorted_data:
                         writer.writerow([club, points])
+                        
+            # Show that it is successful.
 
+            messagebox.showinfo(title="Successful", message="Success!");messagebox.showinfo(title="Successful", message="Please check your destop")
+            
         # Submit button
 
-        submit_button = ctk.CTkButton(newwin, text="Submit", font=self.font1, text_color="#FFFFFF", fg_color="#07b527", hover_color="#07b527",command=dlcsv)
+        submit_button = ctk.CTkButton(newwin, text="Submit", font=self.font1, text_color="#FFFFFF", fg_color="#07b527", hover_color="#07b527",command=dlcsv, )
         submit_button.place(x=215, y= 300)
+
+        # Start second window 
 
         newwin.mainloop()
 
