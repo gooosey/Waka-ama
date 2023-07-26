@@ -7,6 +7,7 @@ import os
 import csv 
 from customtkinter import CTkToplevel
 import time
+import subprocess
 
 # Customtkinter 5.2.0
 # Python 3.11.4
@@ -15,11 +16,10 @@ import time
 # Password : wakarizz   
 
 # File hangling + Gui
-
 class apps:
     def __init__(self):
         # Window information
-        self.root = ctk.CTk();
+        self.root = ctk.CTk()
         self.root.title("login")
         self.root.geometry("350x200")
         self.root.config(bg='#242320')
@@ -38,7 +38,7 @@ class apps:
         self.trials = 0
 
         # Creating the label for username and password
-        self.userlabel = ctk.CTkLabel(self.root, text="Username:", font=self.font1, text_color="#FFFFFF")
+        self.userlabel = ctk.CTkLabel(self.root, text="Username:", font=self.font1, text_color="#FFFFFF") 
         self.userlabel.place(x=15, y=25)
 
         self.passlabel = ctk.CTkLabel(self.root, text="Password:", font=self.font1, text_color="#FFFFFF")
@@ -67,14 +67,15 @@ class apps:
         # If user doesnt eneter anything into the input
         if written_user == '' or written_pass == '':
             messagebox.showwarning(title="Error", message="Enter username and password") # Display if user doesnt enter anything
-        elif written_user == self.username and written_pass == self.password:
+        elif written_user == self.username and written_pass == self.password: # If the user enters correct input into the system
             self.mainwin()
-        elif (written_user != self.username or written_pass != self.password) and self.trials < 3:
+        elif (written_user != self.username or written_pass != self.password) and self.trials < 3: # Error if user incorrect password and username
             messagebox.showwarning(title="Error", message="Invalid username or password") # Display when Invaild info
             self.trials += 1
         else:
             self.loginbu.destroy()  # Destroy the login button
-            triallabel = ctk.CTkLabel(self.root, text="Too many failed attempts", font=self.font1, text_color="#FFFFFF")
+            # Display error when run out of 3 trails
+            triallabel = ctk.CTkLabel(self.root, text="Too many failed attempts", font=self.font1, text_color="#FFFFFF") # Replaces button after destoryed
             triallabel.place(x=80, y=132.5)
 
     # Start new window  
@@ -82,6 +83,7 @@ class apps:
     def mainwin(self):
         # General information about the window
         newwin = ctk.CTkToplevel(self.root)
+        # Centering tool as eval could not be used
         newwin.geometry('500x500+{:d}+{:d}'.format(
             newwin.winfo_screenwidth() // 2 - 250,
             newwin.winfo_screenheight() // 2 - 250
@@ -94,7 +96,7 @@ class apps:
         wellabel = ctk.CTkLabel(newwin, text="Welcome to results", font=self.font2, text_color="#FFFFFF",
                                 width=100, height=100)
         wellabel.place(x=85, y=0)
-
+        # Finds the file location and enters into the text box
         def select_folder(entry):
             fpath = filedialog.askdirectory()
             if fpath:
@@ -140,6 +142,8 @@ class apps:
             races = []
             filename = []
 
+            # Read file
+
             def read_file(file_path):
                 encodings = ['utf-8', 'latin-1', 'utf-16']  # File containing these encodings
                 placeholder = "'"  # Placeholder character to replace invalid characters
@@ -148,10 +152,10 @@ class apps:
                     try:
                         with open(file_path, 'r', encoding=encoding, errors='replace') as file:
                             file_content = file.read()
-                        return file_content.replace('\ufffd', placeholder)
+                        return file_content.replace('\ufffd', placeholder) # Replaces the missing words
                     except UnicodeDecodeError:
                         continue
-
+                # Something wrong with file
                 print(f"Oops! Something went wrong with file: {file_path}")
                 return None
 
@@ -161,7 +165,6 @@ class apps:
                 abs_path = os.path.abspath(folder_path)
 
                 # Walk through the directory tree
-
                 for root, dirs, files in os.walk(abs_path):
                     for dir in dirs:
                         if year in dir:
@@ -169,15 +172,14 @@ class apps:
                             find_files(race, dir_path)
 
             # Function to find files with the given keyword in a folder
-
             def find_files(race, folder_path):
                 for root, dirs, files in os.walk(folder_path):
                     for file in files:
                         if race in file:
                             file_path = os.path.join(folder_path, file)
-                            races.append(read_file(file_path))
-                            filename.append(file_path)
-
+                            races.append(read_file(file_path)) # Send to races to do calculations
+                            filename.append(file_path) # Send to filename to display the files being read
+            # Start program
             find_folder(year, racetype, resources)
 
             # Read file
@@ -185,6 +187,7 @@ class apps:
             file_count_label = ctk.CTkLabel(newwin, text="Files Read: 0", font=self.font1, text_color="#FFFFFF")
             file_count_label.place(x=80, y=350) 
 
+            # Displaying file reading
             def display_filenames(filenames, files_read_label, files_read=0):
                 if filenames:
                     filename = filenames[0]
@@ -207,10 +210,11 @@ class apps:
             # Call the function with the list of filenames and the file count label
             display_filenames(filename, file_count_label)
 
+            # Error if cant find correct information
             if not races:
                 messagebox.showwarning(title="Error", message="Invalid. Make sure you have correct information")
                 return
-
+            # Assigning the place points
             def assign_points(place):
                 points = [0, 8, 7, 6, 5, 4, 3, 2]
                 return points[place] if place < len(points) else 1
@@ -296,9 +300,17 @@ class apps:
                     for club, points in sorted_data:
                         writer.writerow([club, points])
                         
+            # Delay donwloading the file
+            time.sleep(5)
+
+            if os.name == 'nt':  # For Windows
+                os.startfile(file_path)
+            elif os.name == 'posix':  # For macOS and Linux
+                subprocess.call(['open', file_path])
+
             # Show that it is successful.
 
-            messagebox.showinfo(title="Successful", message="Success!");messagebox.showinfo(title="Successful", message="Please check your destop")
+            messagebox.showinfo(title="Successful", message="Success!");messagebox.showinfo(title="Successful", message="Please wait")
             
         # Submit button
 
@@ -312,3 +324,4 @@ class apps:
 # start
 
 apps()
+
